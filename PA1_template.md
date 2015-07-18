@@ -37,7 +37,7 @@ medianSteps <- median(byDate$V1)
 
 
 ```r
-meanByInterval <- dt[, as.integer(mean(steps)), by = interval]
+meanByInterval <- dt[, mean(steps), by = interval]
 
 plot(meanByInterval, type="l", ylab="Average Steps per Day",
      xlab="Intervals (in minutes)",
@@ -45,6 +45,9 @@ plot(meanByInterval, type="l", ylab="Average Steps per Day",
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+
+- The 5 minute interval with the most steps is 835 having 206.1698113 steps on average.
 
 ## Imputing missing values
 
@@ -61,7 +64,8 @@ impData <- rawData
 
 for (i in 1:length(impData$steps)) {
   if (is.na(impData[i,]$steps)) {
-      impData[i,]$steps <- meanByInterval[interval == impData[i,]$interval]$V1
+      impData[i,]$steps <- as.integer(
+          meanByInterval[interval == impData[i,]$interval]$V1)
   }
 }
 
@@ -72,7 +76,7 @@ byDate <- dt[, sum(steps), by = date]
 hist(byDate$V1, main="Histogram of Steps per Day (with imputed values)", xlab="Steps per Day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 
 
 ```r
@@ -112,4 +116,4 @@ xyplot(V1~interval|day.type, data = byDateAndType,
        xlab="Interval")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 

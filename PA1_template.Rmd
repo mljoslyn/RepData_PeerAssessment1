@@ -39,13 +39,18 @@ medianSteps <- median(byDate$V1)
 ## What is the average daily activity pattern?
 
 ```{r}
-meanByInterval <- dt[, as.integer(mean(steps)), by = interval]
+meanByInterval <- dt[, mean(steps), by = interval]
 
 plot(meanByInterval, type="l", ylab="Average Steps per Day",
      xlab="Intervals (in minutes)",
      main="Average Steps per Day across the Intervals")
 
 ```
+
+```{r echo=FALSE}
+maxInterval <- meanByInterval[V1 == max(meanByInterval$V1),]
+```
+- The 5 minute interval with the most steps is `r maxInterval$interval ` having `r maxInterval$V1 ` steps on average.
 
 ## Imputing missing values
 ```{r}
@@ -61,7 +66,8 @@ impData <- rawData
 
 for (i in 1:length(impData$steps)) {
   if (is.na(impData[i,]$steps)) {
-      impData[i,]$steps <- meanByInterval[interval == impData[i,]$interval]$V1
+      impData[i,]$steps <- as.integer(
+          meanByInterval[interval == impData[i,]$interval]$V1)
   }
 }
 
